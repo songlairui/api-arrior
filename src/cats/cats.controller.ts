@@ -9,16 +9,21 @@ import {
   Delete,
   Res,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
+import { RolesGuard } from './roles.guard';
+import { Roles } from './roles.decorator';
 
 @Controller('cats')
+@UseGuards(RolesGuard)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Post()
+  @Roles('admin')
   async create(@Body() createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
